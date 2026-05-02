@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.name }} - Team Task Manager{% endblock %}
+{% block page_title %}Project: {{ project.name }}{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+    <!-- Project Info -->
+    <div>
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3>Description</h3>
+            <p style="color: var(--text-muted); margin-top: 1rem;">{{ project.description|default:"No description provided." }}</p>
+        </div>
+
+        <div class="card">
+            <h3>Tasks</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Assignee</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in project.tasks.all %}
+                        <tr>
+                            <td>{{ task.title }}</td>
+                            <td>{{ task.assignee.username }}</td>
+                            <td><span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: var(--text-muted);">No tasks yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Member Management -->
+    <div>
+        <div class="card">
+            <h3>Team Members</h3>
+            <ul style="list-style: none; margin-top: 1.5rem;">
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                    <span>{{ project.owner.username }} (Owner)</span>
+                    <span class="badge" style="background: var(--primary);">Admin</span>
+                </li>
+                {% for member in project.members.all %}
+                {% if member != project.owner %}
+                <li style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border);">
+                    <span>{{ member.username }}</span>
+                    <span class="badge badge-todo">Member</span>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+
+            {% if user == project.owner %}
+            <div style="margin-top: 2rem;">
+                <h4>Add Member</h4>
+                <form action="{% url 'add_member' project.pk %}" method="post" style="margin-top: 1rem;">
+                    {% csrf_token %}
+                    <select name="user_id" style="width: 100%; padding: 0.6rem; border-radius: 0.5rem; border: 1px solid var(--border); background: #1e293b; color: white; margin-bottom: 1rem;">
+                        {% for u in all_users %}
+                            <option value="{{ u.id }}">{{ u.username }} ({{ u.get_role_display }})</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Add to Project</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

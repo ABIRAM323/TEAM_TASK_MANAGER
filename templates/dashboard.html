@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Team Task Manager{% endblock %}
+{% block page_title %}Overview{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <p class="stat-label">Total Tasks</p>
+        <p class="stat-value">{{ stats.total_tasks }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">In Progress</p>
+        <p class="stat-value" style="color: var(--warning);">{{ stats.in_progress }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Completed</p>
+        <p class="stat-value" style="color: var(--success);">{{ stats.done }}</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-label">Overdue</p>
+        <p class="stat-value" style="color: var(--danger);">{{ stats.overdue }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3>Recent Tasks</h3>
+        {% if user.role == 'admin' %}
+            <a href="{% url 'task_create' %}" class="btn btn-primary" style="text-decoration: none;">+ New Task</a>
+        {% endif %}
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Project</th>
+                    <th>Assignee</th>
+                    <th>Status</th>
+                    <th>Progress</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in recent_tasks %}
+                <tr>
+                    <td style="font-weight: 500;">{{ task.title }}</td>
+                    <td>{{ task.project.name }}</td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <div style="width: 24px; height: 24px; border-radius: 50%; background: var(--border); font-size: 0.6rem; display: flex; align-items: center; justify-content: center;">
+                                {{ task.assignee.username|slice:":1"|upper }}
+                            </div>
+                            {{ task.assignee.username }}
+                        </div>
+                    </td>
+                    <td><span class="badge badge-{{ task.status }}">{{ task.get_status_display }}</span></td>
+                    <td>
+                        <div style="width: 100px; background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden;">
+                            <div style="width: {{ task.progress }}%; height: 100%; background: var(--primary);"></div>
+                        </div>
+                        <span style="font-size: 0.7rem; color: var(--text-muted);">{{ task.progress }}%</span>
+                    </td>
+                    <td>
+                        <span style="color: {% if task.priority == 'high' %}var(--danger){% elif task.priority == 'medium' %}var(--warning){% else %}var(--text-muted){% endif %};">
+                            ● {{ task.get_priority_display }}
+                        </span>
+                    </td>
+                    <td>{{ task.due_date|date:"M d, Y"|default:"No date" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                        No tasks found. Start by creating a project and assigning tasks.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

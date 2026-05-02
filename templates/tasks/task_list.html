@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Tasks - Team Task Manager{% endblock %}
+{% block page_title %}Tasks{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3>Task Management</h3>
+        {% if user.role == 'admin' %}
+            <a href="{% url 'task_create' %}" class="btn btn-primary">+ Create Task</a>
+        {% endif %}
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Task Name</th>
+                    <th>Project</th>
+                    <th>Assignee</th>
+                    <th>Status</th>
+                    <th>Progress</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td style="font-weight: 500;">{{ task.title }}</td>
+                    <td>{{ task.project.name }}</td>
+                    <td>{{ task.assignee.username }}</td>
+                    <td>
+                        <form action="{% url 'update_task_status' task.pk %}" method="post" style="display: flex; gap: 0.5rem;">
+                            {% csrf_token %}
+                            <select name="status" onchange="this.form.submit()" class="badge badge-{{ task.status }}" style="border: none; cursor: pointer; outline: none; -webkit-appearance: none;">
+                                <option value="todo" {% if task.status == 'todo' %}selected{% endif %}>To Do</option>
+                                <option value="in_progress" {% if task.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                                <option value="done" {% if task.status == 'done' %}selected{% endif %}>Done</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <form action="{% url 'update_task_status' task.pk %}" method="post" style="display: flex; align-items: center; gap: 0.5rem; min-width: 150px;">
+                            {% csrf_token %}
+                            <div style="flex: 1; background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="width: {{ task.progress }}%; height: 100%; background: var(--primary); transition: width 0.3s ease;"></div>
+                            </div>
+                            <input type="number" name="progress" value="{{ task.progress }}" min="0" max="100" 
+                                   onchange="this.form.submit()"
+                                   style="width: 50px; background: none; border: 1px solid var(--border); color: white; border-radius: 4px; font-size: 0.75rem; padding: 2px 4px;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">%</span>
+                        </form>
+                    </td>
+                    <td>
+                        <span style="color: {% if task.priority == 'high' %}var(--danger){% elif task.priority == 'medium' %}var(--warning){% else %}var(--text-muted){% endif %};">
+                            ● {{ task.get_priority_display }}
+                        </span>
+                    </td>
+                    <td>{{ task.due_date|date:"M d, Y"|default:"No date" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 3rem;">
+                        No tasks found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

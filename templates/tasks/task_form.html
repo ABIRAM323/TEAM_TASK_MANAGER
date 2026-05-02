@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Task - Team Task Manager{% endblock %}
+{% block page_title %}New Task{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Task Title</label>
+            <input type="text" name="title" required style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white;">
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Project</label>
+            <select name="project" required style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: #1e293b; color: white;">
+                {% for project in projects %}
+                    <option value="{{ project.id }}">{{ project.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Assignee</label>
+            <select name="assignee" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: #1e293b; color: white;">
+                <option value="">Unassigned</option>
+                {% for u in users %}
+                    <option value="{{ u.id }}">{{ u.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Priority</label>
+                <select name="priority" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: #1e293b; color: white;">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+            <div>
+                <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Due Date</label>
+                <input type="date" name="due_date" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white;">
+            </div>
+        </div>
+        <div style="margin-bottom: 2rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Description</label>
+            <textarea name="description" rows="3" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border); background: rgba(0,0,0,0.2); color: white;"></textarea>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary">Create Task</button>
+            <a href="{% url 'task_list' %}" class="btn" style="background: rgba(255,255,255,0.05); color: white; text-decoration: none;">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
