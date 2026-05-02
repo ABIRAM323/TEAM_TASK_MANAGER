@@ -1,73 +1,66 @@
-# 🏆 Team Task Flow - Full Stack Management App
+# 🚀 Team Task Manager
 
-This is a personal project built to demonstrate a full-stack Django implementation with role-based access control and RESTful APIs. It's designed for small teams to track their project progress efficiently.
+A professional, feature-rich Django application for managing projects, tasks, and teams with ease. This project is optimized for high-performance production environments and is fully deployable to **Railway**.
 
+## ✨ Features
 
-## ✨ Key Features
-
-- **🔐 Secure Authentication**: Signup/Login system with role-based access (Admin/Member).
-- **📂 Project Management**: Create and manage multiple projects.
-- **✅ Task Tracking**: Create, assign, and monitor tasks with status and priority indicators.
-- **📊 Premium Dashboard**: A stunning, glassmorphism-inspired dashboard for a quick overview of team productivity.
-- **⚡ REST APIs**: Fully documented RESTful endpoints built with Django REST Framework.
-- **📱 Responsive Design**: Seamless experience across desktop and mobile.
+- **Dashboard**: A clean overview of your ongoing projects and tasks.
+- **Project Management**: Create, update, and track progress of multiple projects.
+- **Task Management**: Assign tasks to team members, set priorities, and track status.
+- **Role-based Access**: Custom user model with 'Admin' and 'Member' roles.
+- **Team Collaboration**: Manage team members and their assignments.
+- **Production Ready**: Configured with PostgreSQL, Gunicorn, WhiteNoise, and automated migrations.
 
 ## 🛠️ Tech Stack
 
-- **Backend**: Django 4.2+
-- **API**: Django REST Framework
-- **Frontend**: Django Templates + Vanilla CSS + JS
-- **Database**: PostgreSQL (Production) / SQLite (Local)
-- **Deployment**: Railway
-- **Security**: WhiteNoise (Static files), CORS-headers, Role-based permissions
+- **Backend**: Django (Python)
+- **Database**: PostgreSQL (Production) / SQLite (Development)
+- **Styling**: Vanilla CSS (Custom Design)
+- **Deployment**: Railway / GitHub Actions
+- **Server**: Gunicorn with WhiteNoise for static files
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Local Development)
 
-### 1. Clone the repository
-```bash
-git clone <your-repo-url>
-cd team-task-management
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/ABIRAM323/TEAM_TASK_MANAGER.git
+   cd TEAM_TASK_MANAGER
+   ```
 
-### 2. Install dependencies
-```bash
-pip install -r requirements.txt
-```
+2. **Set up virtual environment**:
+   ```bash
+   python -m venv venv
+   source venv/Scripts/activate  # On Windows: venv\Scripts\activate
+   ```
 
-### 3. Run Migrations
-```bash
-python manage.py migrate
-```
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 4. Create a Superuser (Optional)
-```bash
-python manage.py createsuperuser
-```
+4. **Run migrations**:
+   ```bash
+   python manage.py migrate
+   ```
 
-### 5. Start the Server
-```bash
-python manage.py runserver
-```
+5. **Start development server**:
+   ```bash
+   python manage.py runserver
+   ```
 
-## 🔑 Demo Accounts
+## 🌍 Production Deployment (Railway)
 
-- **Admin**: `admin` / `admin123`
-- **Member**: `member1` / `member123`
+This project is pre-configured for Railway. Simply connect your GitHub repository and ensure you have a **PostgreSQL** service linked to your web service.
 
-## 📡 API Endpoints
+### Key Deployment Files:
+- `railway.json`: Deployment orchestration.
+- `Procfile`: Gunicorn server configuration.
+- `start.sh`: Automated startup script for migrations and static files.
+- `fix_admin.py`: Guaranteed admin account creation.
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/projects/` | GET | List all projects (filtered by role) |
-| `/api/tasks/` | GET | List all tasks |
-| `/api/tasks/` | POST | Create a new task (Admin only) |
+## 🔒 License
 
-## 🌐 Deployment
-
-This app is optimized for **Railway**. To deploy:
-1. Connect your GitHub repository to Railway.
-2. Set the `SECRET_KEY` and `DEBUG=False` in environment variables.
-3. Railway will automatically detect the `Procfile` and deploy.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
-Built with ❤️ for the Candidate Nomination Assignment.
+Created with ❤️ by ABIRAM323
