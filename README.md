@@ -11,6 +11,18 @@ A professional, feature-rich Django application for managing projects, tasks, an
 - **Team Collaboration**: Manage team members and their assignments.
 - **Production Ready**: Configured with PostgreSQL, Gunicorn, WhiteNoise, and automated migrations.
 
+## 🔐 Demo Credentials
+
+You can use the following accounts to test the application features:
+
+### Admin Account (Full Access)
+- **Username**: `admin`
+- **Password**: `admin12345`
+
+### Member Account (Standard Access)
+- **Username**: `member1`
+- **Password**: `member12345` (Create this via Signup)
+
 ## 🛠️ Tech Stack
 
 - **Backend**: Django (Python)
