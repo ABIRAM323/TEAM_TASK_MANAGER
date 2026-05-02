@@ -12,10 +12,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 import dj_database_url
-from pathlib import Path
-from dotenv import load_dotenv
-
-load_dotenv()
+# Load environment variables
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    # On Railway, we rely on their environment variables directly
+    pass
+else:
+    load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,16 +95,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Database configuration for Railway/Production
-# Priority: DATABASE_URL -> POSTGRES_URL -> PGURL -> local sqlite
-DATABASE_URL = os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL') or os.environ.get('PGURL')
-
 DATABASES = {
     'default': dj_database_url.config(
-        default=DATABASE_URL or f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600
+        default=os.environ.get('DATABASE_URL') or os.environ.get('POSTGRES_URL'),
+        conn_max_age=600,
     )
 }
+
+if not DATABASES['default']:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 
 
 # Password validation
