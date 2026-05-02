@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 import dj_database_url
+from pathlib import Path
+from dotenv import load_dotenv
 # Load environment variables
 if os.environ.get('RAILWAY_ENVIRONMENT'):
     # On Railway, we rely on their environment variables directly
